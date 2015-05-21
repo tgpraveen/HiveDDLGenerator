@@ -1,0 +1,13 @@
+#!/bin/bash
+
+args=("$@")
+
+DELIMITER=${args[0]}
+FILENAME=${args[1]}
+
+HIVECOLUMNS=`head -n1 $FILENAME|sed s/"$DELIMITER"/" STRING, "/g`
+
+TABLENAME=`echo $FILENAME|cut -d'.' -f1`
+
+echo CREATE TABLE $TABLENAME \(`echo $HIVECOLUMNS` STRING\)
+echo LOAD DATA LOCAL INPATH \'$FILENAME\' INTO TABLE $TABLENAME\;
